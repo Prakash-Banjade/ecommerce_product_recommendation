@@ -9,8 +9,8 @@ import { ConfigService } from '@nestjs/config';
             provide: 'ASTRA_DB_CLIENT',
             inject: [ConfigService],
             useFactory: async (configServic: ConfigService) => {
-                const client = new DataAPIClient(configServic.get('ASTRA_DB_APP_TOKEN')); // Replace with your token
-                const db = client.db(configServic.get('ASTRA_DB_API_ENDPOINT')); // Replace with your endpoint
+                const client = new DataAPIClient(configServic.get('ASTRA_DB_APP_TOKEN'));
+                const db = client.db(configServic.get('ASTRA_DB_API_ENDPOINT'));
                 await db.listCollections(); // Verify connection
                 console.log('Connected to AstraDB');
                 return db;
