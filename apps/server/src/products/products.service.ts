@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Db } from '@datastax/astra-db-ts';
+import { ProductQueryDto } from './dto/product-query.dto';
 
 @Injectable()
 export class ProductsService {
@@ -13,9 +14,13 @@ export class ProductsService {
     return 'This action adds a new product';
   }
 
-  async findAll() {
+  async findAll(productQueryDto: ProductQueryDto) {
     const collection = this.db.collection('products');
-    const result = (await collection.find({}, {}).toArray());
+    const result = (await collection.find({}, {
+      vectorize: productQueryDto.search,
+      limit: productQueryDto.take,
+      skip: productQueryDto.skip,
+    }).toArray());
 
     return result;
   }
