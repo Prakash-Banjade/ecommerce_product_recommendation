@@ -1,38 +1,47 @@
-import Image from "next/image"
-import { Card, CardContent, CardFooter } from "../ui/card"
+import { Card, CardContent } from "../ui/card"
 import { Star } from "lucide-react"
 import { ProductCardWrapper } from "./product-card-wrapper"
 import Link from "next/link"
-import { IVectorProduct } from "../../../../../packages/interfaces/vector-product.interfact"
 import { shortenTitle } from "../../../../../packages/utils/shorten-title"
+import { TVectorProduct } from "packages/shared/schemas/product.schema"
+import { Badge } from "../ui/badge"
 
-export const ProductCard = ({ product }: { product: IVectorProduct }) => {
+export const ProductCard = ({ product }: { product: TVectorProduct }) => {
     return (
         <ProductCardWrapper>
             <Link href={`/product/${product._id}`} className="group">
-                <Card className="overflow-hidden group">
-                    <CardContent className="p-0">
-                        <Image
+                <Card className="w-full max-w-sm overflow-hidden h-full">
+                    <div className="relative">
+                        <img
+                            src={product.featured_image ?? "/placeholder.avif"}
                             alt={product.title}
-                            className="object-cover w-full h-60 transition-transform duration-300 group-hover:scale-105"
-                            height="240"
-                            src={product.featured_image ?? '/product-fallback.avif'}
-                            width="360"
-                            priority
+                            className="w-full h-48 object-cover"
                         />
-                    </CardContent>
-                    <CardFooter className="p-4">
-                        <div className="w-full">
-                            <h3 className="font-semibold text-lg mb-1 hover:underline hover:text-primary transition-all">{shortenTitle(product.title, 40)}</h3>
-                            <div className="flex items-center justify-between">
-                                <span className="text-sm">
-                                    <Star className="inline-block w-4 h-4 mr-1 text-yellow-400" />
-                                    4.5 (128)
-                                </span>
-                                <span className="font-bold">${product.price}</span>
-                            </div>
+                        <Badge className="absolute top-2 right-2 bg-yellow-400 text-yellow-900">
+                            {product.discount}% OFF
+                        </Badge>
+                    </div>
+                    <CardContent className="p-4">
+                        <h2 className="text-lg font-semibold mb-2">{shortenTitle(product.title)}</h2>
+                        <div className="flex items-baseline mb-2">
+                            <span className="text-2xl font-bold text-primary">${product.discounted_price}</span>
+                            <span className="ml-2 text-sm text-muted-foreground line-through">${product.actual_price}</span>
                         </div>
-                    </CardFooter>
+                        <div className="flex items-center">
+                            <div className="flex">
+                                {[...Array(5)].map((_, i) => (
+                                    <Star
+                                        key={i}
+                                        className={`w-4 h-4 ${i < Math.floor(product.rating) ? "text-yellow-400 fill-yellow-400" : "text-gray-300"
+                                            }`}
+                                    />
+                                ))}
+                            </div>
+                            <span className="ml-2 text-sm text-muted-foreground">
+                                {product.rating.toFixed(1)} ({product.review_count} reviews)
+                            </span>
+                        </div>
+                    </CardContent>
                 </Card>
             </Link>
         </ProductCardWrapper>

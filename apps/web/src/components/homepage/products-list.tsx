@@ -1,9 +1,9 @@
 import React from 'react'
 import { ProductCard } from './product-card'
-import { IVectorProduct } from '../../../../../packages/interfaces/vector-product.interfact'
+import { TVectorProductsArray } from 'packages/shared/schemas/product.schema'
 
 type Props = {
-    products: IVectorProduct[]
+    products: TVectorProductsArray
 }
 
 export default function ProductsList({ products }: Props) {

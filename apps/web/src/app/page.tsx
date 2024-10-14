@@ -1,7 +1,8 @@
-import Header from "@/components/header"
-import HomeMainSection from "@/components/homepage/main-section"
+import Header from "../components/header";
+import HomeMainSection from "../components/homepage/main-section";
+import { trpc } from "./trpc"
 
-export default function HomePage() {
+export default async function HomePage() {
 
   return (
     <div className="flex flex-col min-h-screen">

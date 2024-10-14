@@ -1,8 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
 import { Db } from '@datastax/astra-db-ts';
-import { TDefaultQueryParam } from '../../../../packages/schemas/default-query-param.schema'
+import { TDefaultQueryParam } from '../../../../packages/shared/schemas/default-query-param.schema'
+import { TVectorProductsArray } from '../../../../packages/shared/schemas/product.schema';
 
 @Injectable()
 export class ProductsService {
@@ -10,7 +9,7 @@ export class ProductsService {
     @Inject('ASTRA_DB_CLIENT') private readonly db: Db
   ) { }
 
-  async findAll(query: TDefaultQueryParam) {
+  async findAll(query: TDefaultQueryParam): Promise<TVectorProductsArray> {
     const collection = this.db.collection('products');
     const result = (await collection.find({}, {
       // vectorize: query.search,
@@ -18,6 +17,6 @@ export class ProductsService {
       // skip: query.skip,
     }).toArray());
 
-    return result;
+    return result as TVectorProductsArray;
   }
 }

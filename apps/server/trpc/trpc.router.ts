@@ -2,18 +2,33 @@ import { INestApplication, Injectable } from "@nestjs/common";
 import { TrpcService } from "./trpc.service";
 import { z } from "zod";
 import * as trpcExpress from "@trpc/server/adapters/express";
+import { ProductsService } from "src/products/products.service";
+import { defaultQueryParamSchema } from '../../../packages/shared/schemas/default-query-param.schema'
+import { vectorProductsArraySchema } from '../../../packages/shared/schemas/product.schema'
+
 
 @Injectable()
 export class TrpcRouter {
     public appRouter;
 
-    constructor(private readonly trpcService: TrpcService) {
+    constructor(
+        private readonly trpcService: TrpcService,
+        private readonly productService: ProductsService,
+    ) {
         this.appRouter = this.trpcService.router({
             hello: this.trpcService.procedure
                 .input(z.object({ name: z.string().optional() }))
                 .query(({ input }) => {
-                    return `Hello ${input?.name ?? 'World'}!`;
+                    return `hello ${input?.name ?? 'world'}`
                 }),
+            products: this.trpcService.router({
+                getAll: this.trpcService.procedure
+                    .input(defaultQueryParamSchema)
+                    .output(vectorProductsArraySchema)
+                    .query(async ({ input }) => {
+                        return await this.productService.findAll(input)
+                    }),
+            })
         });
     }
 
