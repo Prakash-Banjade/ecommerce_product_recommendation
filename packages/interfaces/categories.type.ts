@@ -1,4 +1,4 @@
-export enum Categories {
+export enum ECategory {
     Electronics = 'Electronics',
     Furniture = 'Furniture',
     Fashion = 'Fashion',
