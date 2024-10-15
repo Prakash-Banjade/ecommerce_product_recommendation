@@ -11,7 +11,7 @@ export const vectorProductSchema = z.object({
     rating: z.number().min(0).max(5),
     actual_price: z.number().min(0),
     discounted_price: z.number().min(0),
-    discount: z.any(),
+    discount: z.number().min(0),
     stock_quantity: z.number().int().min(0),
     sku: z.string(),
     seller: z.string(),
@@ -21,8 +21,19 @@ export const vectorProductSchema = z.object({
     $vector: z.array(z.number()),
 })
 
-export const vectorProductsArraySchema = z.array(vectorProductSchema)
-
 export type TVectorProduct = z.infer<typeof vectorProductSchema>
 
-export type TVectorProductsArray = z.infer<typeof vectorProductsArraySchema>
+
+export const vectorProductsArraySchema = z.array(z.object({
+    _id: z.string().uuid(),
+    title: z.string(),
+    category: z.nativeEnum(ECategory),
+    rating: z.number().min(0).max(5),
+    price: z.number().min(0),
+    actual_price: z.number().min(0),
+    discounted_price: z.number().min(0),
+    featured_image: z.string().url().optional(),
+    discount: z.number().min(0),
+}))
+
+export type TVectorProductsArray = z.infer<typeof vectorProductsArraySchema>;

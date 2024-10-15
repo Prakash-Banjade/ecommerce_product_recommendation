@@ -3,17 +3,36 @@ import { Star, ShoppingCart, Heart } from "lucide-react"
 import { Badge } from "apps/web/src/components/ui/badge"
 import { Button } from "apps/web/src/components/ui/button"
 import { trpc } from "apps/web/src/trpc"
+import SimilarProductsSection from "apps/web/src/components/single-product-page.tsx/similar-products-section"
+import { Suspense } from "react"
+import SingleProductLoading from "apps/web/src/components/single-product-page.tsx/single-product-loading"
+import { TVectorProduct } from "packages/shared/schemas/product.schema"
 
-type Props = {
+export type SingleProductPageProps = {
     params: {
         id: string
     }
 }
 
-export default async function SingleProductPage({ params }: Props) {
+export default async function SingleProductPage({ params }: SingleProductPageProps) {
     const product = await trpc.products.getById.query(params.id);
 
-    if (!product) return <div>Product not found</div>
+    console.log(product)
+    if (!product) return <div>Product not found</div>;
+
+    console.log(product)
+
+    return (
+        <>
+            <Suspense fallback={<SingleProductLoading />}>
+                <CurrentProductSection product={product} />
+            </Suspense>
+            <SimilarProductsSection vector={product.$vector ?? ''} />
+        </>
+    )
+}
+
+export async function CurrentProductSection({ product }: { product: TVectorProduct }) {
 
     return (
         <div className="container mx-auto px-4 py-8">
@@ -21,25 +40,12 @@ export default async function SingleProductPage({ params }: Props) {
                 <div className="space-y-4">
                     <div className="relative aspect-square">
                         <Image
-                            src="/placeholder.svg"
+                            src={product.featured_image ?? '/placeholder.avif'}
                             alt={product.title}
                             layout="fill"
                             objectFit="cover"
                             className="rounded-lg"
                         />
-                    </div>
-                    <div className="grid grid-cols-4 gap-2">
-                        {[...Array(4)].map((_, i) => (
-                            <div key={i} className="relative aspect-square">
-                                <Image
-                                    src="/placeholder.svg"
-                                    alt={`${product.title} thumbnail ${i + 1}`}
-                                    layout="fill"
-                                    objectFit="cover"
-                                    className="rounded-md"
-                                />
-                            </div>
-                        ))}
                     </div>
                 </div>
                 <div className="space-y-6">

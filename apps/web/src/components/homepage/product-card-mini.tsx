@@ -7,42 +7,43 @@ import { TVectorProduct } from "packages/shared/schemas/product.schema"
 import { Badge } from "../ui/badge"
 import Image from "next/image"
 
-export const ProductCard = ({ product }: { product: TVectorProduct }) => {
+export const ProductCardMini = ({ product }: { product: TVectorProduct }) => {
     return (
         <ProductCardWrapper>
             <Link href={`/products/${product._id}`} className="group">
-                <Card className="w-full max-w-sm overflow-hidden h-full">
+                <Card className="w-full max-w-[200px] overflow-hidden">
                     <div className="relative">
                         <Image
-                            src={product.featured_image ?? "/placeholder.avif"}
+                            src={product.featured_image ?? "/placeholder.svg"}
                             alt={product.title}
-                            height={400}
-                            width={400}
-                            className="w-full h-48 object-cover"
-                            loading="lazy"
+                            height={150}
+                            width={200}
+                            className="w-full h-32 object-cover"
                         />
-                        <Badge className="absolute top-2 right-2" variant={'secondary'}>
+                        <Badge className="absolute top-1 right-1 text-xs" variant="secondary">
                             {product.discount}% OFF
                         </Badge>
                     </div>
-                    <CardContent className="p-4">
-                        <h2 className="text-lg font-semibold mb-2 hover:underline hover:text-primary">{shortenTitle(product.title)}</h2>
-                        <div className="flex items-baseline mb-2">
-                            <span className="text-2xl font-bold text-primary">${product.discounted_price}</span>
-                            <span className="ml-2 text-sm text-muted-foreground line-through">${product.actual_price}</span>
+                    <CardContent className="p-2">
+                        <h2 className="text-sm font-semibold mb-1 truncate hover:text-primary">
+                            {shortenTitle(product.title)}
+                        </h2>
+                        <div className="flex items-baseline mb-1">
+                            <span className="text-base font-bold text-primary">${product.discounted_price}</span>
+                            <span className="ml-1 text-xs text-muted-foreground line-through">${product.actual_price}</span>
                         </div>
                         <div className="flex items-center">
                             <div className="flex">
                                 {[...Array(5)].map((_, i) => (
                                     <Star
                                         key={i}
-                                        className={`w-4 h-4 ${i < Math.floor(product.rating) ? "text-yellow-400 fill-yellow-400" : "text-gray-300"
+                                        className={`w-3 h-3 ${i < Math.floor(product.rating) ? "text-yellow-400 fill-yellow-400" : "text-gray-300"
                                             }`}
                                     />
                                 ))}
                             </div>
-                            <span className="ml-2 text-sm text-muted-foreground">
-                                {product.rating.toFixed(1)} ({product.review_count} reviews)
+                            <span className="ml-1 text-xs text-muted-foreground">
+                                {product.rating.toFixed(1)} ({product.review_count})
                             </span>
                         </div>
                     </CardContent>
