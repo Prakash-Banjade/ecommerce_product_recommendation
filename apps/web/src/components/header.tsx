@@ -8,7 +8,7 @@ type Props = {}
 
 export default function Header({ }: Props) {
     return (
-        <header className="sticky top-0 z-50 w-full backdrop-blur-md  border-b text-primary">
+        <header className="sticky top-0 z-50 w-full backdrop-blur-md bg-background border-b text-primary py-2 shadow-sm"> 
             <div className="container flex h-16 items-center justify-between px-4">
                 <Link className="flex items-center space-x-2" href="/">
                     <ShoppingBag className="h-6 w-6" />
