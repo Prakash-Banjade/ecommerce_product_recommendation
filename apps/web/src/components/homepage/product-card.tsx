@@ -5,24 +5,28 @@ import Link from "next/link"
 import { shortenTitle } from "../../../../../packages/utils/shorten-title"
 import { TVectorProduct } from "packages/shared/schemas/product.schema"
 import { Badge } from "../ui/badge"
+import Image from "next/image"
 
 export const ProductCard = ({ product }: { product: TVectorProduct }) => {
     return (
         <ProductCardWrapper>
-            <Link href={`/product/${product._id}`} className="group">
+            <Link href={`/products/${product._id}`} className="group">
                 <Card className="w-full max-w-sm overflow-hidden h-full">
                     <div className="relative">
-                        <img
+                        <Image
                             src={product.featured_image ?? "/placeholder.avif"}
                             alt={product.title}
+                            height={400}
+                            width={400}
                             className="w-full h-48 object-cover"
+                            loading="lazy"
                         />
-                        <Badge className="absolute top-2 right-2 bg-yellow-400 text-yellow-900">
-                            {product.discount}% OFF
+                        <Badge className="absolute top-2 right-2" variant={'secondary'}>
+                            {product.discount} OFF
                         </Badge>
                     </div>
                     <CardContent className="p-4">
-                        <h2 className="text-lg font-semibold mb-2">{shortenTitle(product.title)}</h2>
+                        <h2 className="text-lg font-semibold mb-2 hover:underline hover:text-primary">{shortenTitle(product.title)}</h2>
                         <div className="flex items-baseline mb-2">
                             <span className="text-2xl font-bold text-primary">${product.discounted_price}</span>
                             <span className="ml-2 text-sm text-muted-foreground line-through">${product.actual_price}</span>
