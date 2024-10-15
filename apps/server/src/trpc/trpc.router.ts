@@ -3,8 +3,8 @@ import { TrpcService } from "./trpc.service";
 import { z } from "zod";
 import * as trpcExpress from "@trpc/server/adapters/express";
 import { ProductsService } from "src/products/products.service";
-import { defaultQueryParamSchema } from '../../../packages/shared/schemas/default-query-param.schema'
-import { vectorProductsArraySchema } from '../../../packages/shared/schemas/product.schema'
+import { defaultQueryParamSchema } from '../../../../packages/shared/schemas/default-query-param.schema'
+import { TVectorProduct, vectorProductsArraySchema, vectorProductSchema } from '../../../../packages/shared/schemas/product.schema'
 
 
 @Injectable()
@@ -27,6 +27,11 @@ export class TrpcRouter {
                     .output(vectorProductsArraySchema)
                     .query(async ({ input }) => {
                         return await this.productService.findAll(input)
+                    }),
+                getById: this.trpcService.procedure
+                    .input(z.string())
+                    .query(({ input }) => {
+                        return this.productService.getProductById(input) as Promise<TVectorProduct | null>;
                     }),
             })
         });
