@@ -12,7 +12,7 @@ export class ProductsService {
   async findAll(query: TDefaultQueryParam): Promise<TVectorProductsArray> {
     const collection = this.db.collection('products');
     const result = (await collection.find({}, {
-      // vectorize: query.search,
+      vectorize: query.search,
       limit: query.take,
       projection: {
         _id: true,

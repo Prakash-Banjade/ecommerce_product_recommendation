@@ -24,9 +24,8 @@ export class TrpcRouter {
             products: this.trpcService.router({
                 getAll: this.trpcService.procedure
                     .input(defaultQueryParamSchema)
-                    .output(vectorProductsArraySchema)
                     .query(({ input }) => {
-                        return this.productService.findAll(input)
+                        return this.productService.findAll(input) as Promise<TVectorProductsArray>;
                     }),
                 getById: this.trpcService.procedure
                     .input(z.string())

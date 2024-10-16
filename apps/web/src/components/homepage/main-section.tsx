@@ -1,10 +1,10 @@
 import React from 'react'
 import ProductsList from './products-list'
 import { trpc } from '../../trpc';
-type Props = {}
+import { THomePageProps } from '../../app/page';
 
-export default async function HomeMainSection({ }: Props) {
-    const products = await trpc.products.getAll.query({ take: 20 });
+export default async function HomeMainSection({ searchParams }: THomePageProps) {
+    const products = await trpc.products.getAll.query({ take: 20, search: decodeURI(searchParams.search) });
 
     return (
         <main className="flex-1">
