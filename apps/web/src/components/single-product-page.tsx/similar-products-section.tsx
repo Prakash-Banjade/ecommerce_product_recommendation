@@ -11,7 +11,7 @@ export default async function SimilarProductsSection({ vector }: { vector: numbe
 
             <div className="mt-8 flex flex-wrap gap-4">
                 {products.map((product) => (
-                    <ProductCardMini product={product} key={product.title} />
+                    <ProductCardMini product={product} key={product._id} />
                 ))}
             </div>
         </section>
