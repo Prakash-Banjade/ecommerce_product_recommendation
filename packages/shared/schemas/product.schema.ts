@@ -35,6 +35,7 @@ export const vectorProductsArraySchema = z.array(z.object({
     discounted_price: z.number().min(0),
     featured_image: z.string().url().optional(),
     discount: z.number().min(0),
+    $similarity: z.number().min(0).max(1).optional(),
 }))
 
 export type TVectorProductsArray = z.infer<typeof vectorProductsArraySchema>;
