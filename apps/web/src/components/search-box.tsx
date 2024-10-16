@@ -11,7 +11,7 @@ export function SearchBox() {
 
     const handleSearchChange = debounce((e: React.ChangeEvent<HTMLInputElement>) => {
         e.target.value
-            ? router.push(pathname + '?search=' + e.target.value)
+            ? router.push('/?search=' + e.target.value)
             : router.push(pathname)
     }, 500);
 
