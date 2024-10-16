@@ -38,7 +38,7 @@ export async function CurrentProductSection({ product }: { product: TVectorProdu
                 <div className="space-y-4">
                     <div className="relative aspect-square">
                         <Image
-                            src={product.featured_image ?? '/placeholder.avif'}
+                            src={product.featured_image ?? '/placeholder.png'}
                             alt={product.title}
                             layout="fill"
                             objectFit="cover"
