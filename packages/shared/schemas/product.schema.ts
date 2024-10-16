@@ -1,5 +1,6 @@
 import { ECategory } from '../../shared/interfaces/categories.type';
 import { z } from 'zod';
+import { defaultQueryParamSchema } from './default-query-param.schema';
 
 export const vectorProductSchema = z.object({
     _id: z.string().uuid(),
@@ -12,13 +13,13 @@ export const vectorProductSchema = z.object({
     actual_price: z.number().min(0),
     discounted_price: z.number().min(0),
     discount: z.number().min(0),
-    stock_quantity: z.number().int().min(0),
-    sku: z.string(),
-    seller: z.string(),
-    brand: z.string(),
-    review_count: z.number().int().min(0),
-    $vectorize: z.string().optional(),
-    $vector: z.array(z.number()),
+    stock_quantity: z.number().int().min(0).optional(),
+    sku: z.string().optional(),
+    seller: z.string().optional(),
+    brand: z.string().optional(),
+    review_count: z.number().int().min(0).optional(),
+    $vectorize: z.string().optional().optional(),
+    $vector: z.array(z.number()).optional(),
 })
 
 export type TVectorProduct = z.infer<typeof vectorProductSchema>
@@ -37,3 +38,12 @@ export const vectorProductsArraySchema = z.array(z.object({
 }))
 
 export type TVectorProductsArray = z.infer<typeof vectorProductsArraySchema>;
+
+
+export const similarProductQuerySchema = z.object({
+    vector: z.array(z.number()),
+}).merge(defaultQueryParamSchema).merge(z.object({
+    take: z.number().min(1).max(100).optional().default(11),
+}));
+
+export type TSimilarProductQuery = z.infer<typeof similarProductQuerySchema>;

@@ -14,7 +14,7 @@ export const ProductCardMini = ({ product }: { product: TVectorProduct }) => {
                 <Card className="w-full max-w-[200px] overflow-hidden">
                     <div className="relative">
                         <Image
-                            src={product.featured_image ?? "/placeholder.svg"}
+                            src={product.featured_image ?? "/placeholder.avif"}
                             alt={product.title}
                             height={150}
                             width={200}

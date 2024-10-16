@@ -4,7 +4,7 @@ import { z } from "zod";
 import * as trpcExpress from "@trpc/server/adapters/express";
 import { ProductsService } from "src/products/products.service";
 import { defaultQueryParamSchema } from '../../../../packages/shared/schemas/default-query-param.schema'
-import { TVectorProduct, TVectorProductsArray, vectorProductsArraySchema, vectorProductSchema } from '../../../../packages/shared/schemas/product.schema'
+import { similarProductQuerySchema, TVectorProduct, TVectorProductsArray, vectorProductsArraySchema } from '../../../../packages/shared/schemas/product.schema'
 
 
 @Injectable()
@@ -25,8 +25,8 @@ export class TrpcRouter {
                 getAll: this.trpcService.procedure
                     .input(defaultQueryParamSchema)
                     .output(vectorProductsArraySchema)
-                    .query(async ({ input }) => {
-                        return await this.productService.findAll(input)
+                    .query(({ input }) => {
+                        return this.productService.findAll(input)
                     }),
                 getById: this.trpcService.procedure
                     .input(z.string())
@@ -34,8 +34,7 @@ export class TrpcRouter {
                         return this.productService.getProductById(input) as Promise<TVectorProduct | null>;
                     }),
                 getSimilarProducts: this.trpcService.procedure
-                    .input(z.string())
-                    .output(vectorProductsArraySchema)
+                    .input(similarProductQuerySchema)
                     .query(({ input }) => {
                         return this.productService.getSimilarProducts(input) as Promise<TVectorProductsArray>;
                     }),

@@ -7,6 +7,7 @@ import SimilarProductsSection from "apps/web/src/components/single-product-page.
 import { Suspense } from "react"
 import SingleProductLoading from "apps/web/src/components/single-product-page.tsx/single-product-loading"
 import { TVectorProduct } from "packages/shared/schemas/product.schema"
+import SimilarProductsLoading from "apps/web/src/components/single-product-page.tsx/similar-products-loading"
 
 export type SingleProductPageProps = {
     params: {
@@ -17,17 +18,14 @@ export type SingleProductPageProps = {
 export default async function SingleProductPage({ params }: SingleProductPageProps) {
     const product = await trpc.products.getById.query(params.id);
 
-    console.log(product)
     if (!product) return <div>Product not found</div>;
-
-    console.log(product)
 
     return (
         <>
-            <Suspense fallback={<SingleProductLoading />}>
-                <CurrentProductSection product={product} />
+            <CurrentProductSection product={product} />
+            <Suspense fallback={<SimilarProductsLoading />}>
+                <SimilarProductsSection vector={product.$vector ?? []} />
             </Suspense>
-            <SimilarProductsSection vector={product.$vector ?? ''} />
         </>
     )
 }
