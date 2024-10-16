@@ -52,9 +52,7 @@ export class ProductsService {
 
     const data = result as TVectorProductsArray
 
-    // console.log(data)
-
-    const similarityThreshold = 0.7;
+    const similarityThreshold = 0.5;
 
     const filteredData = data.filter((product) => {
       return product.$similarity
@@ -87,7 +85,6 @@ export class ProductsService {
         brand: true,
         review_count: true,
         featured_image: true,
-        $vector: true,
       }
     });
 
@@ -98,10 +95,20 @@ export class ProductsService {
 
   async getSimilarProducts(payload: TSimilarProductQuery): Promise<TVectorProductsArray> {
     const collection = this.db.collection('products');
+
+    const product = await collection.findOne({ _id: payload.productId }, {
+      projection: {
+        _id: true,
+        $vector: true
+      }
+    }) as TVectorProduct;
+
+    if (!product) return [];
+
     const search = await collection.find({}, {
       limit: payload.take,
       includeSimilarity: true,
-      vector: payload.vector,
+      vector: product.$vector,
       projection: {
         _id: true,
         $vectorize: true,
@@ -119,13 +126,20 @@ export class ProductsService {
         brand: true,
         review_count: true,
         featured_image: true,
-        $vector: true,
       }
     }).toArray();
 
     // remove first one because it's the current product
     search.shift();
 
-    return search as TVectorProductsArray;
+    const similarityThreshold = 0.5;
+
+    const filteredData = search.filter((product) => {
+      return product.$similarity
+        ? product.$similarity >= similarityThreshold
+        : true;
+    })
+
+    return filteredData as TVectorProductsArray;
   }
 }
