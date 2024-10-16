@@ -2,8 +2,8 @@ import React from 'react'
 import { trpc } from '../../trpc';
 import { ProductCardMini } from '../homepage/product-card-mini';
 
-export default async function SimilarProductsSection({ vector }: { vector: number[] }) {
-    const products = await trpc.products.getSimilarProducts.query({ vector, take: 8 });
+export default async function SimilarProductsSection({ productId }: { productId: string }) {
+    const products = await trpc.products.getSimilarProducts.query({ productId: productId });
 
     return (
         <section className='container px-4 my-8'>

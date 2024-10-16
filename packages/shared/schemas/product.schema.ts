@@ -42,7 +42,7 @@ export type TVectorProductsArray = z.infer<typeof vectorProductsArraySchema>;
 
 
 export const similarProductQuerySchema = z.object({
-    vector: z.array(z.number()),
+    productId: z.string(),
 }).merge(defaultQueryParamSchema).merge(z.object({
     take: z.number().min(1).max(100).optional().default(11),
 }));

@@ -5,7 +5,6 @@ import { Button } from "apps/web/src/components/ui/button"
 import { trpc } from "apps/web/src/trpc"
 import SimilarProductsSection from "apps/web/src/components/single-product-page.tsx/similar-products-section"
 import { Suspense } from "react"
-import SingleProductLoading from "apps/web/src/components/single-product-page.tsx/single-product-loading"
 import { TVectorProduct } from "packages/shared/schemas/product.schema"
 import SimilarProductsLoading from "apps/web/src/components/single-product-page.tsx/similar-products-loading"
 
@@ -24,7 +23,7 @@ export default async function SingleProductPage({ params }: SingleProductPagePro
         <>
             <CurrentProductSection product={product} />
             <Suspense fallback={<SimilarProductsLoading />}>
-                <SimilarProductsSection vector={product.$vector ?? []} />
+                <SimilarProductsSection productId={product._id} />
             </Suspense>
         </>
     )
